@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio GitHub</title>
+    <style>
+        /* CSS untuk mengatur tampilan */
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: black;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #repos {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.7);
+            max-height: 100vh;
+            overflow-y: auto;
+            width: 30%;
+        }
+        .repo {
+            margin-bottom: 20px;
+        }
+        .repo a {
+            color: #00ff00;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .repo a:hover {
+            text-decoration: underline;
+        }
+        .repo p {
+            margin: 5px 0 0;
+            font-size: 0.9em;
+        }
+        /* Efek Terminal Hollywood */
+        #terminal {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 70%;
+            height: 100vh;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 1;
+            font-size: 0.8em;
+        }
+        .line {
+            white-space: nowrap;
+        }
+        /* Scrollbar kustom */
+        #repos::-webkit-scrollbar {
+            width: 8px;
+        }
+        #repos::-webkit-scrollbar-thumb {
+            background: #00ff00;
+        }
+        #repos::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div id="repos">
+        <h1>Repositori GitHub</h1>
+        <div id="repo-list"></div>
+    </div>
+    <div id="terminal"></div>
+    <script>
+        // Efek Matrix
+        var canvas = document.getElementById('matrix');
+        var ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        letters = letters.split('');
+
+        var fontSize = 16;
+        var columns = canvas.width / fontSize;
+        var drops = [];
+
+        for (var x = 0; x < columns; x++)
+            drops[x] = Math.random() * canvas.height;
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (var i = 0; i < drops.length; i++) {
+                var text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i]);
+
+                if (drops[i] > canvas.height && Math.random() > 0.975)
+                    drops[i] = 0;
+
+                drops[i] += fontSize;
+            }
+        }
+
+        setInterval(drawMatrix, 33);
+
+        // Efek Terminal Hollywood
+        var terminal = document.getElementById('terminal');
+        var lines = [
+            'Initializing system...',
+            'Loading modules...',
+            'Connecting to GitHub API...',
+            'Fetching repositories...',
+            'Rendering interface...',
+            'System ready.',
+            'User login: guest',
+            'Access granted.',
+            'Starting session...',
+            'Welcome to the Matrix.'
+        ];
+
+        var index = 0;
+
+        function typeLine() {
+            if (index < lines.length) {
+                var line = document.createElement('div');
+                line.className = 'line';
+                terminal.appendChild(line);
+
+                var text = lines[index];
+                var charIndex = 0;
+
+                function typeChar() {
+                    if (charIndex < text.length) {
+                        line.textContent += text.charAt(charIndex);
+                        charIndex++;
+                        setTimeout(typeChar, 50);
+                    } else {
+                        line.textContent += ' _';
+                        index++;
+                        setTimeout(typeLine, 500);
+                    }
+                    terminal.scrollTop = terminal.scrollHeight;
+                }
+                typeChar();
+            } else {
+                generateRandomLines();
+            }
+        }
+
+        function generateRandomLines() {
+            var randomText = '0x' + Math.random().toString(16).substr(2, 8) + ' ';
+            var line = document.createElement('div');
+            line.className = 'line';
+            line.textContent = randomText;
+            terminal.appendChild(line);
+
+            if (terminal.children.length > 50) {
+                terminal.removeChild(terminal.children[0]);
+            }
+
+            terminal.scrollTop = terminal.scrollHeight;
+            setTimeout(generateRandomLines, 100);
+        }
+
+        typeLine();
+
+        // Mengambil repositori dari GitHub
+        var username = 'Muchammad Noor Arifin'; // Ganti dengan nama pengguna GitHub Anda
+        var repoList = document.getElementById('repo-list');
+
+        fetch(`https://api.github.com/users/${username}/repos`)
+            .then(response => response.json())
+            .then(repos => {
+                repos.forEach(repo => {
+                    var repoDiv = document.createElement('div');
+                    repoDiv.classList.add('repo');
+
+                    var repoLink = document.createElement('a');
+                    repoLink.href = repo.html_url;
+                    repoLink.target = '_blank';
+                    repoLink.textContent = repo.name;
+
+                    var repoDesc = document.createElement('p');
+                    repoDesc.textContent = repo.description || 'Tidak ada deskripsi';
+
+                    repoDiv.appendChild(repoLink);
+                    repoDiv.appendChild(repoDesc);
+
+                    repoList.appendChild(repoDiv);
+                });
+            })
+            .catch(error => {
+                console.error('Terjadi kesalahan:', error);
+                repoList.textContent = 'Gagal memuat repositori.';
+            });
+
+        // Menyesuaikan ukuran canvas saat jendela diubah ukurannya
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = canvas.width / fontSize;
+            drops = [];
+            for (var x = 0; x < columns; x++)
+                drops[x] = Math.random() * canvas.height;
+        });
+    </script>
+</body>
+</html>
