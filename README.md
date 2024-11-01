@@ -6,9 +6,10 @@ Halo, nama saya **NOOR ARIFIN**. Saya seorang **MAHASISWA** dengan minat dalam *
 
 ## 🚀 Proyek Unggulan
 
-- **[Proyek 1](link ke proyek 1)**: Deskripsi singkat tentang proyek 1.
-- **[Proyek 2](link ke proyek 2)**: Deskripsi singkat tentang proyek 2.
-- **[Proyek 3](link ke proyek 3)**: Deskripsi singkat tentang proyek 3.
+- **[Implementasi CNN untuk Klasifikasi Gambar](link ke proyek 1)**: Mengembangkan model Convolutional Neural Network yang efisien untuk klasifikasi citra dalam dataset besar.
+- **[Prediksi Deret Waktu dengan LSTM](link ke proyek 2)**: Membangun model Long Short-Term Memory untuk memprediksi data deret waktu dengan akurasi tinggi.
+- **[Aplikasi Computer Vision dalam Deteksi Objek](link ke proyek 3)**: Mengembangkan sistem deteksi objek real-time menggunakan teknik-teknik terkini dalam Computer Vision.
+ **[Proyek 3](link ke proyek 3)**: Deskripsi singkat tentang proyek 3.
 
 ## 🌐 Bahasa dan Teknologi
 
